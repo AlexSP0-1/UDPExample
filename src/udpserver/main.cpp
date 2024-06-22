@@ -5,7 +5,6 @@
 
 int main(int argc, char *argv[])
 {
-    //Created just to parse arguments with the built-in parser
     QCoreApplication app(argc, argv);
 
     app.setOrganizationName("Example Corp.");
@@ -15,5 +14,7 @@ int main(int argc, char *argv[])
 
     udpserver::UDPServerExample server(app);
 
-    return server.run();
+    server.run();
+
+    return app.exec();
 }

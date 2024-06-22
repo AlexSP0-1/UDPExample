@@ -1,4 +1,4 @@
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt5 COMPONENTS Core Network REQUIRED)
 find_package(Boost REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -28,4 +28,4 @@ set(SOURCES
 
 add_udp_example_executable(udp_ex_server ${SOURCES} ${HEADERS})
 
-target_link_libraries(udp_ex_server Qt5::Core)
+target_link_libraries(udp_ex_server Qt::Core Qt::Network)

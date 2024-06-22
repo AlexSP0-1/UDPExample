@@ -7,8 +7,13 @@ namespace udpserver
 class UDPServerStorageInterface
 {
 public:
-    virtual ~UDPServerStorageInterface()              = default;
+    virtual ~UDPServerStorageInterface() = default;
+
     virtual QString getResource(QString resourceName) = 0;
+
+    virtual void update() = 0;
+
+    virtual bool isValid() = 0;
 };
 } // namespace udpserver
 

@@ -3,13 +3,16 @@
 
 #include <memory>
 #include <QCoreApplication>
+#include <QNetworkDatagram>
+#include <QObject>
 
 namespace udpserver
 {
 class UDPServerExamplePrivate;
 
-class UDPServerExample
+class UDPServerExample : public QObject
 {
+    Q_OBJECT
 public:
     UDPServerExample(QCoreApplication &app);
     ~UDPServerExample();
@@ -21,6 +24,8 @@ private:
 
 private:
     int parseArguments();
+    int readPendingDatagrams();
+    int processDatagram(QNetworkDatagram datagram);
 
 private:
     UDPServerExample(const UDPServerExample &) = delete;
