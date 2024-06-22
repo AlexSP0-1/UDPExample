@@ -99,7 +99,20 @@ int UDPServerExample::readPendingDatagrams()
 
 int UDPServerExample::processDatagram(QNetworkDatagram datagram)
 {
-    printf("Get datagram: %d.", datagram.senderPort());
+    QByteArray incoming_data = datagram.data();
+
+    QString resource(incoming_data);
+
+    printf("Client connected and request resourse: %s\n", resource.toStdString().c_str());
+
+    QString answer = d->m_storage->getResource(resource);
+
+    QByteArray outcoming_data = answer.toLatin1();
+
+    d->m_socket->writeDatagram(datagram.makeReply(outcoming_data));
+
+    printf("Answer send: %s\n", answer.toStdString().c_str());
+
     return 0;
 }
 

@@ -82,7 +82,7 @@ void UDPServerStorageFileImpl::parseLine(std::string &line)
     //Appends all words to value
     if (words.size() > 2)
     {
-        for (int i = 3; i < words.size(); i++)
+        for (int i = 2; i < words.size(); i++)
         {
             value.append(QString(" " + words.at(i)));
         }
