@@ -109,7 +109,7 @@ void UDPClientExample::processDatagram(QNetworkDatagram datagram)
     unsigned int destPort = datagram.destinationPort();
     if (destPort == d->m_options.port)
     {
-        //Server is anavaliable
+        //Server is not avaliable on localhost
         d->m_ret = -1;
 
         return;

@@ -4,6 +4,7 @@
 
 #include <storage/UDPServerStorageFileImpl.h>
 #include <storage/UDPServerStorageInterface.h>
+#include <QThreadPool>
 #include <QUdpSocket>
 
 namespace udpserver
@@ -89,30 +90,12 @@ int UDPServerExample::readPendingDatagrams()
     while (d->m_socket->hasPendingDatagrams())
     {
         QNetworkDatagram datagram = d->m_socket->receiveDatagram();
-        if (processDatagram(datagram))
-        {
-            break;
-        }
+
+        UDPserverExampleWorker *worker = new UDPserverExampleWorker(d->m_socket.get(), d->m_storage.get(), datagram);
+
+        //QThreadPool takes ownership of worker and automatically deletes it.
+        QThreadPool::globalInstance()->start(worker);
     }
-    return 0;
-}
-
-int UDPServerExample::processDatagram(QNetworkDatagram datagram)
-{
-    QByteArray incoming_data = datagram.data();
-
-    QString resource(incoming_data);
-
-    printf("Client connected and request resourse: %s\n", resource.toStdString().c_str());
-
-    QString answer = d->m_storage->getResource(resource);
-
-    QByteArray outcoming_data = answer.toLatin1();
-
-    d->m_socket->writeDatagram(datagram.makeReply(outcoming_data));
-
-    printf("Answer send: %s\n", answer.toStdString().c_str());
-
     return 0;
 }
 

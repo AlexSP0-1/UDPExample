@@ -6,6 +6,8 @@
 #include <QNetworkDatagram>
 #include <QObject>
 
+#include "udpserverexampleworker.h"
+
 namespace udpserver
 {
 class UDPServerExamplePrivate;
@@ -25,7 +27,6 @@ private:
 private:
     int parseArguments();
     int readPendingDatagrams();
-    int processDatagram(QNetworkDatagram datagram);
 
 private:
     UDPServerExample(const UDPServerExample &) = delete;

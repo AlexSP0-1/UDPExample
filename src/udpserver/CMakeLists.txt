@@ -10,11 +10,11 @@ set(CMAKE_AUTORCC ON)
 set(HEADERS
     commandlineparser/commandlineoptions.h
     commandlineparser/commandlineparser.h
-
     storage/UDPServerStorageInterface.h
     storage/UDPServerStorageFileImpl.h
 
     udpserverexample.h
+    udpserverexampleworker.h
 )
 
 set(SOURCES
@@ -24,6 +24,7 @@ set(SOURCES
     storage/UDPServerStorageFileImpl.cpp
 
     udpserverexample.cpp
+    udpserverexampleworker.cpp
 )
 
 add_udp_example_executable(udp_ex_server ${SOURCES} ${HEADERS})
