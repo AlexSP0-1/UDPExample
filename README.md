@@ -1,4 +1,43 @@
 # UDPExample
+
+## TOC
+
+* [Release Notes](#Notes)
+* [Usage](#Usage)
+* [Description](#Description)
+
+## Notes
+
+IMPORTANT. Please, see description.md file.
+
+## Usage
+
+### udp_ex_client [options]
+
+Options:
+
+  ```
+  -h, --help                Displays help on commandline options.
+  --help-all                Displays help including Qt specific options.
+  -v, --version             Displays version information.
+  -p, --port <port>         Specifies the port for the request. If not pecified, 11123 will be used.
+  -a, --address <address>  Specifies the ip4 address for the request. If not specified, localhost will be used.
+  -r, --resource <address>  Specifies the resource name for the request.
+  ```
+
+### Usage: udp_ex_server [options]
+
+Options:
+```
+  -h, --help         Displays help on commandline options.
+  --help-all         Displays help including Qt specific options.
+  -v, --version      Displays version information.
+  -p, --port <port>  Specify port to listen. If not specified will be listen on default port 11123
+  -f, --file <file>  Gets resourcves from file.
+```
+
+## Description
+
 Test Assignment
 
 Write two applications:
@@ -34,5 +73,6 @@ code or error text
 A plus would be the realization of the possibility of parallel processing of "simultaneously" received requests.
 
 2. A client that accepts via command line parameters the name of the requested resource and displays (stdout/stderr) the server response.
+A plus would be the realization of the possibility of parallel processing of "simultaneously" received requests.
 
-Translated with DeepL.com (free version)
+2. A client that accepts via command line parameters the name of the requested resource and displays (stdout/stderr) the server response.
