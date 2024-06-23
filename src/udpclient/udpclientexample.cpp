@@ -1,7 +1,9 @@
 #include "udpclientexample.h"
 
-#include <commandlineparser/commandlineoptions.h>
-#include <commandlineparser/commandlineparser.h>
+#include "../udpexamplemessages/udpexamplemessagecreator.h"
+#include "../udpexamplemessages/udpexamplesimplemessageparser.h"
+#include "commandlineparser/commandlineoptions.h"
+#include "commandlineparser/commandlineparser.h"
 
 #include <QDataStream>
 #include <QTimer>
@@ -79,10 +81,11 @@ int UDPClientExample::run()
 
 void UDPClientExample::sendRequest()
 {
-    QByteArray data = d->m_options.resourceName.toLatin1();
-    QDataStream out(&data, QIODevice::WriteOnly);
+    udpexamplemessages::UdpExampleMessageType requestType = udpexamplemessages::UdpExampleMessageType::Request;
 
-    size_t bytes = d->m_socket->writeDatagram(data, d->m_options.address, d->m_options.port);
+    udpexamplemessages::UDPExampleMessageCreator creator(requestType, d->m_options.resourceName, NULL);
+
+    size_t bytes = d->m_socket->writeDatagram(creator.getData(), d->m_options.address, d->m_options.port);
     if (!bytes)
     {
         fprintf(stderr, "Can't send request!\n");
@@ -105,7 +108,6 @@ void UDPClientExample::readPendingDatagrams()
 
 void UDPClientExample::processDatagram(QNetworkDatagram datagram)
 {
-    QNetworkDatagram datt(datagram);
     unsigned int destPort = datagram.destinationPort();
     if (destPort == d->m_options.port)
     {
@@ -115,11 +117,19 @@ void UDPClientExample::processDatagram(QNetworkDatagram datagram)
         return;
     }
 
-    QByteArray incoming_data = datagram.data();
+    udpexamplemessages::UDPExampleSimpleMessageParser parser(datagram.data());
 
-    QString answer(incoming_data);
+    QString resourceName = parser.getResourceName();
+    QString resource     = parser.getResourceValue();
 
-    fprintf(stderr, "%s\n", answer.toStdString().c_str());
+    if (parser.getType() == udpexamplemessages::UdpExampleMessageType::Answer)
+    {
+        printf("%s", parser.getResourceValue().toStdString().c_str());
+    }
+    else
+    {
+        fprintf(stderr, "%s", parser.getResourceValue().toStdString().c_str());
+    }
 
     d->m_application->quit();
 }

@@ -1,4 +1,7 @@
 #include "udpserverexampleworker.h"
+#include "../udpexamplemessages/udpexamplemessage.h"
+#include "../udpexamplemessages/udpexamplemessagecreator.h"
+#include "../udpexamplemessages/udpexamplesimplemessageparser.h"
 
 #include <QNetworkDatagram>
 
@@ -27,15 +30,26 @@ UDPserverExampleWorker::~UDPserverExampleWorker() {}
 
 void UDPserverExampleWorker::run()
 {
-    QByteArray incoming_data = d->m_datagram.data();
+    //Parse request message
+    udpexamplemessages::UDPExampleSimpleMessageParser parser(d->m_datagram.data());
 
-    QString resource(incoming_data);
+    if (parser.getType() != udpexamplemessages::UdpExampleMessageType::Request)
+    {
+        return;
+    }
 
-    QString answer = d->m_storage->getResource(resource);
+    //Get resource value from storage
+    QString answer = d->m_storage->getResource(parser.getResourceName());
 
-    QByteArray outcoming_data = answer.toLatin1();
+    //Create and send answer
+    udpexamplemessages::UdpExampleMessageType answerType = udpexamplemessages::UdpExampleMessageType::Answer;
 
-    d->m_socket->writeDatagram(d->m_datagram.makeReply(outcoming_data));
+    if (answer.isEmpty())
+        answerType = udpexamplemessages::UdpExampleMessageType::ResourceNotFoundError;
+
+    udpexamplemessages::UDPExampleMessageCreator creator(answerType, parser.getResourceName(), answer);
+
+    d->m_socket->writeDatagram(d->m_datagram.makeReply(creator.getData()));
 }
 
 } // namespace udpserver

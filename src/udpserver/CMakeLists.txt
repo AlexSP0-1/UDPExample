@@ -29,4 +29,4 @@ set(SOURCES
 
 add_udp_example_executable(udp_ex_server ${SOURCES} ${HEADERS})
 
-target_link_libraries(udp_ex_server Qt::Core Qt::Network)
+target_link_libraries(udp_ex_server Qt::Core Qt::Network udpexamplemess)
