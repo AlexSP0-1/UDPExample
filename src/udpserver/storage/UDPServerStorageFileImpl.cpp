@@ -3,6 +3,7 @@
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <iostream>
+#include <shared_mutex>
 #include <QHash>
 
 namespace udpserver
@@ -11,16 +12,20 @@ class UDPServerStorageFileImplPrivate
 {
 public:
     UDPServerStorageFileImplPrivate(QString filename)
-        : m_filename(filename)
+        : m_isValid(false)
+        , m_filename(filename)
+        , m_resources{}
+        , m_mutex(std::make_unique<std::shared_mutex>())
     {}
 
     ~UDPServerStorageFileImplPrivate() {}
-    bool m_isValid{false};
+    bool m_isValid;
 
-    QHash<QString, QString> m_resources{};
+    QHash<QString, QString> m_resources;
 
-public:
-    QString m_filename{};
+    QString m_filename;
+
+    std::unique_ptr<std::shared_mutex> m_mutex;
 };
 
 UDPServerStorageFileImpl::UDPServerStorageFileImpl(QString filename)
@@ -31,6 +36,9 @@ UDPServerStorageFileImpl::~UDPServerStorageFileImpl() {}
 
 QString UDPServerStorageFileImpl::getResource(QString resourceName)
 {
+    //Try to lock mutex for reading, not for writing
+    std::shared_lock<std::shared_mutex>(*d->m_mutex.get());
+
     auto it = d->m_resources.find(resourceName);
     if (it == d->m_resources.end())
         return NULL;
@@ -40,6 +48,9 @@ QString UDPServerStorageFileImpl::getResource(QString resourceName)
 
 void UDPServerStorageFileImpl::update()
 {
+    //Try to lock mutex only for writing
+    std::lock_guard<std::shared_mutex>(*d->m_mutex.get());
+
     d->m_resources.clear();
 
     std::string line;
