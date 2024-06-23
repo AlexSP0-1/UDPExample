@@ -27,3 +27,4 @@ endmacro(add_udp_example_executable)
 
 add_subdirectory(udpserver)
 add_subdirectory(udpclient)
+add_subdirectory(udpexamplemessages)
