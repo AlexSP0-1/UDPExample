@@ -85,7 +85,7 @@ void UDPClientExample::sendRequest()
     size_t bytes = d->m_socket->writeDatagram(data, d->m_options.address, d->m_options.port);
     if (!bytes)
     {
-        printf("Can't send request!\n");
+        fprintf(stderr, "Can't send request!\n");
 
         d->m_ret = -1;
 
@@ -119,14 +119,14 @@ void UDPClientExample::processDatagram(QNetworkDatagram datagram)
 
     QString answer(incoming_data);
 
-    printf("%s\n", answer.toStdString().c_str());
+    fprintf(stderr, "%s\n", answer.toStdString().c_str());
 
     d->m_application->quit();
 }
 
 void UDPClientExample::stopOnTimeout()
 {
-    printf("Can't get answer from server!\n");
+    fprintf(stderr, "Can't get answer from server!\n");
 
     d->m_ret = -1;
 
