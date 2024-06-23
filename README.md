@@ -8,7 +8,7 @@
 
 ## Notes
 
-IMPORTANT. Please, see description.md file.
+IMPORTANT. Please, see [description.md](https://github.com/AlexSP0-1/UDPExample/blob/main/description.md) file.
 
 ## Usage
 
